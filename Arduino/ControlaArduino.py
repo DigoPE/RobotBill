@@ -11,6 +11,7 @@ import serial #Importa a biblioteca
 
 class Arduino():
 
+    #Função que chama outras funções para controlar outras placas de Arduino ou ESP32.
     def SistemasArduino(comandos):
         ordem = comandos.replace(' ', '')
         ordem = ordem.lower()
@@ -19,7 +20,48 @@ class Arduino():
             or ordem == 'atirar' or ordem == 'atira' or ordem == 'preparar' or ordem == 'prepara':
                 Arduino.ComandaNerf(ordem)
 
+        if ordem == 'frente' or ordem == 'esquerda' or ordem == 'direita' or ordem == 'auto' \
+                or ordem == 'alto':
+                Arduino.ComandaRodas(ordem)
 
+    def ComandaRodas(ordem):
+        comando_executado = False
+        Count = 0
+
+        while True: #Loop para a conexão com o Arduino
+            try:  #Tenta se conectar, se conseguir, o loop se encerra
+                arduino = serial.Serial('COM4', 9600)
+                print('Arduino das Rodas conectado')
+                break
+
+            except:
+                pass
+
+        while True: #Loop principal
+
+            try:
+                if ordem == 'frente':
+                    print(ordem)
+                    arduino.write('f'.encode())
+                    comando_executado = True
+                elif ordem == 'esquerda':
+                    print(ordem)
+                    arduino.write('e'.encode())
+                    comando_executado = True
+                elif ordem == 'direita':
+                    print(ordem)
+                    arduino.write('d'.encode())
+                    comando_executado = True
+
+                arduino.flush() #Limpa a comunicação
+                time.sleep(2)
+                Count = Count + 1
+                # Sai do loop se o comando foi executado
+                if comando_executado and Count >= 2:
+                    break
+
+            except:
+                pass
 
 
     def ComandaNerf(ordem):
@@ -29,7 +71,7 @@ class Arduino():
         while True: #Loop para a conexão com o Arduino
             try:  #Tenta se conectar, se conseguir, o loop se encerra
                 arduino = serial.Serial('COM3', 9600)
-                print('Arduino conectado')
+                print('Arduino do Nerf conectado')
                 break
 
             except:
