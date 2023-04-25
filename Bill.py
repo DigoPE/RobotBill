@@ -108,7 +108,7 @@ def executa_comando():
             6: "Tem muito ruido! Acho que tem muita gente falando ao mesmo tempo.",
             7: "Acho que tem uma música ou muitas pessoas conversando ao fundo!",
             8: "Oi?!! Tem alguém ai?!!",
-            9: "Zzzzz... há! Desculpe! Me distrai! "
+            9: "Zzzzz... há! Desculpe! Me distraí! "
         }
         resposta = switcher.get(num, "Número inválido")
 
@@ -183,28 +183,29 @@ def comando_voz_usuario():
         ordem = comando.replace('bill','')
         maquina.say(ordem)
         maquina.runAndWait()
-        Arduino.ComandaNerf(ordem)
+        #Arduino.ComandaNerf(ordem)
+        Arduino.SistemasArduino(ordem)
 
     elif 'bio' in comando:
         # Só funciona on-line. Corrigir o erro quando o PC estiver off-line.
         ordem = comando.replace('bio','')
         maquina.say(ordem)
         maquina.runAndWait()
-        Arduino.ComandaNerf(ordem)
+        Arduino.SistemasArduino(ordem)
 
     elif 'viu' in comando:
         # Só funciona on-line. Corrigir o erro quando o PC estiver off-line.
         ordem = comando.replace('viu','')
         maquina.say(ordem)
         maquina.runAndWait()
-        Arduino.ComandaNerf(ordem)
+        Arduino.SistemasArduino(ordem)
 
     elif 'vi o' in comando:
         # Só funciona on-line. Corrigir o erro quando o PC estiver off-line.
         ordem = comando.replace('vi o','')
         maquina.say(ordem)
         maquina.runAndWait()
-        Arduino.ComandaNerf(ordem)
+        Arduino.SistemasArduino(ordem)
 
     else:
         # Gera a resposta utilizando o contexto atual

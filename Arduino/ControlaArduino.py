@@ -7,9 +7,22 @@ import time
 
 import serial #Importa a biblioteca
 
+
+
 class Arduino():
 
-    def ComandaNerf(comanda):
+    def SistemasArduino(comandos):
+        ordem = comandos.replace(' ', '')
+        ordem = ordem.lower()
+
+        if ordem == 'cancela' or ordem == 'cancelar' or ordem == 'disparar' or ordem == 'dispara' \
+            or ordem == 'atirar' or ordem == 'atira' or ordem == 'preparar' or ordem == 'prepara':
+                Arduino.ComandaNerf(ordem)
+
+
+
+
+    def ComandaNerf(ordem):
         comando_executado = False
         Count = 0
 
@@ -25,39 +38,39 @@ class Arduino():
         while True: #Loop principal
             #O cmd é onde será armazenado o comando serial e posteriormente enviado para o Arduino.
             #cmd = str(input('Digite "a" para ligar e "s" para desligar. ')) #Recebe a Ordem vinda do Bill.
-            ordem = comanda.replace(' ', '')
+            #ordem = comanda.replace(' ', '')
 
             try:
-                if ordem.lower() == 'cancela':
-                    print(ordem.lower())
+                if ordem == 'cancela':
+                    print(ordem)
                     arduino.write('c'.encode())
                     comando_executado = True
-                elif ordem.lower() == 'cancelar':
-                    print(ordem.lower())
+                elif ordem == 'cancelar':
+                    print(ordem)
                     arduino.write('c'.encode())
                     comando_executado = True
-                elif ordem.lower() == 'disparar':
+                elif ordem == 'disparar':
                     comando_executado = True
                     arduino.write('d'.encode())
-                elif ordem.lower() == 'dispara':
+                elif ordem == 'dispara':
                     arduino.write('d'.encode())
                     comando_executado = True
-                elif ordem.lower() == 'atirar':
+                elif ordem == 'atirar':
                     arduino.write('d'.encode())
                     comando_executado = True
-                elif ordem.lower() == 'atira':
+                elif ordem == 'atira':
                     arduino.write('d'.encode())
                     comando_executado = True
-                elif ordem.lower() == 'preparar':
-                    print(ordem.lower())
+                elif ordem == 'preparar':
+                    print(ordem)
                     arduino.write('p'.encode())
                     comando_executado = True
-                elif ordem.lower() == 'prepara':
-                    print(ordem.lower())
+                elif ordem == 'prepara':
+                    print(ordem)
                     arduino.write('p'.encode())
                     comando_executado = True
                 arduino.flush() #Limpa a comunicação
-                time.sleep(5)
+                time.sleep(2)
                 Count = Count + 1
                 # Sai do loop se o comando foi executado
                 if comando_executado and Count >= 2:
