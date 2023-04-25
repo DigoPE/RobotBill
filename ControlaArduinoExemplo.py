@@ -27,12 +27,14 @@ while True: #Loop principal
         arduino.write('s'.encode())
 
     elif cmd == 'c':
+        print(cmd.lower())
         arduino.write('c'.encode())
 
     elif cmd == 'd': #Senão, envia o "w" para o olho olhar para cima.
         arduino.write('d'.encode())
 
     elif cmd == 'p': #Prepara Nerf.
+        print(cmd.lower())
         arduino.write('p'.encode())
 
     arduino.flush() #Limpa a comunicação

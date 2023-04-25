@@ -7,6 +7,8 @@ import openai
 import random
 import socket
 
+from Arduino.ControlaArduino import Arduino
+
 maquina = pyttsx3.init()
 
 # Configurando a velocidade da fala:
@@ -47,7 +49,7 @@ def abrir_YouTube(descricao):
 
 def executa_chatGPT(prompt):
     # Inicialize o API key do OpenAI
-    openai.api_key = "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"
+    #openai.api_key =
     # Defina o modelo a ser usado (no caso, o GPT-3)
     model_engine = "text-davinci-002"
 
@@ -175,6 +177,34 @@ def comando_voz_usuario():
     elif 'error' in comando:
         maquina.say('Pode repetir, por favor?')
         maquina.runAndWait()
+
+    elif 'bill' in comando:
+        # Só funciona on-line. Corrigir o erro quando o PC estiver off-line.
+        ordem = comando.replace('bill','')
+        maquina.say(ordem)
+        maquina.runAndWait()
+        Arduino.ComandaNerf(ordem)
+
+    elif 'bio' in comando:
+        # Só funciona on-line. Corrigir o erro quando o PC estiver off-line.
+        ordem = comando.replace('bio','')
+        maquina.say(ordem)
+        maquina.runAndWait()
+        Arduino.ComandaNerf(ordem)
+
+    elif 'viu' in comando:
+        # Só funciona on-line. Corrigir o erro quando o PC estiver off-line.
+        ordem = comando.replace('viu','')
+        maquina.say(ordem)
+        maquina.runAndWait()
+        Arduino.ComandaNerf(ordem)
+
+    elif 'vi o' in comando:
+        # Só funciona on-line. Corrigir o erro quando o PC estiver off-line.
+        ordem = comando.replace('vi o','')
+        maquina.say(ordem)
+        maquina.runAndWait()
+        Arduino.ComandaNerf(ordem)
 
     else:
         # Gera a resposta utilizando o contexto atual
