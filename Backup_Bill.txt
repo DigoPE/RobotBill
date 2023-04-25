@@ -1,0 +1,179 @@
+import speech_recognition as sr
+import pyttsx3
+import datetime
+import wikipedia
+import openai
+#import pywhatkit
+
+import requests
+from bs4 import BeautifulSoup
+import webbrowser
+
+maquina = pyttsx3.init()
+
+# Configurando a velocidade da fala:
+rate = maquina.getProperty('rate')
+maquina.setProperty('rate', rate-50)
+################################################
+
+# Configurando o volume da fala: O volume padrão é 1, nesse caso estamos aumentando em 50%
+volume = maquina.getProperty('volume')
+maquina.setProperty('volume', volume+0.50)
+################################################
+
+#Mudando a Voz.
+voices = maquina.getProperty('voices')
+maquina.setProperty('voice', voices[1].id)
+maquina.setProperty('useCachedVoice', True)
+################################################
+
+def abrir_YouTube(descricao):
+    # Substitua o espaço pelo sinal de mais (+) para formar a URL correta
+    descricao_formatada = descricao.replace(' ', '+')
+    url = f"https://www.youtube.com/results?search_query={descricao_formatada}"
+
+    # Fazer o request para a página da pesquisa
+    r = requests.get(url)
+
+    # Extrair o link do primeiro vídeo da página, se existir
+    soup = BeautifulSoup(r.text, 'html.parser')
+    link = soup.select_one('#contents > ytd-video-renderer > div > div > div > div > h3 > a')
+    if link is not None:
+        video_url = f"https://www.youtube.com{link['href']}"
+
+        # Abrir o vídeo no navegador padrão
+        webbrowser.open(video_url)
+    else:
+        print("Não foi encontrado nenhum vídeo correspondente à pesquisa.")
+
+def executa_chatGPT(prompt):
+    # Inicialize o API key do OpenAI
+    openai.api_key = "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"
+    # Defina o modelo a ser usado (no caso, o GPT-3)
+    model_engine = "text-davinci-002"
+
+    # Obtenha uma resposta do modelo
+    params = openai.Completion.create(
+        engine=model_engine,
+        prompt=prompt,
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+
+    answer = params.choices[0].text
+    return answer
+
+def  analisa_respostaGPT(resp):
+
+    if len(resp) > 500:
+        maquina.say('Minha resposta é um pouco extensa, deseja escuta-la?')
+        maquina.runAndWait()
+
+        comando = executa_comando()
+        if 'sim' in comando:
+            return True
+        else:
+            return False
+
+def executa_comando():
+
+    audio = sr.Recognizer()
+    with sr.Microphone() as source:
+        print('Ouvindo..')
+        voz = audio.listen(source)
+
+    try:
+        comando = audio.recognize_google(voz, language='pt-BR')
+        comando = comando.lower()
+        if 'bill' in comando:
+            comando = comando.replace('bill', '')
+            maquina.say(comando)
+            maquina.runAndWait()
+
+    except sr.UnknownValueError:
+        print('Não entendi!')
+        maquina.say('Não entendi!')
+        maquina.runAndWait()
+        return 'error'
+
+    except sr.RequestError as e:
+        print('Erro ao requisitar resultados; {0}'.format(e))
+        maquina.say('Erro ao requisitar resultados; Provavelmente sua conexão está Off-line.')
+        maquina.runAndWait()
+        return 'error'
+    except:
+        print('Microfone não está Funcionando.')
+        maquina.say('Microfone não está Funcionando.')
+        maquina.runAndWait()
+        return 'error'
+
+    return comando
+
+
+def comando_voz_usuario():
+    # Inicializa o contexto da conversa
+    context = ""
+    comando = executa_comando()
+
+    if 'horas' in comando:
+        hora = datetime.datetime.now().strftime('%H:%M')
+        maquina.say('Agora são' + hora)
+        maquina.runAndWait()
+    elif 'procure por' in comando:
+        procurar = comando.replace('procure por', '')
+        wikipedia.set_lang('pt')
+        resultado = wikipedia.summary(procurar,2)
+        print(resultado)
+        maquina.say(resultado)
+        maquina.runAndWait()
+    elif 'toque' in comando:
+        musica = comando.replace('toque', '')
+        abrir_YouTube(musica)
+        maquina.say('Tocando música: ' + musica)
+        maquina.runAndWait()
+
+        # Só funciona on-line. Corrigir o erro quando o PC estiver off-line.
+    #    musica = comando.replace('toque','')
+    #    resultado = pywhatkit.playonyt(musica)
+    #    maquina.say('Tocando música: ' + musica)
+    #    maquina.runAndWait()
+    elif 'quem é você' in comando:
+        maquina.say('Eu sou a Bill.')
+        maquina.runAndWait()
+    elif 'quem és tu' in comando:
+        maquina.say('Eu sou a Bill.')
+        maquina.runAndWait()
+    elif 'como se chamas' in comando:
+        maquina.say('Eu me chamo Bill.')
+        maquina.runAndWait()
+    elif 'como se chama-se' in comando:
+        maquina.say('Eu me chamo Bill.')
+        maquina.runAndWait()
+    elif 'qual o seu nome' in comando:
+        maquina.say('Eu sou a Bill.')
+        maquina.runAndWait()
+    elif 'qual o teu nome' in comando:
+        maquina.say('Eu sou a Bill.')
+        maquina.runAndWait()
+    elif 'error' in comando:
+        maquina.say('Pode repetir, por favor?')
+        maquina.runAndWait()
+
+    else:
+        # Gera a resposta utilizando o contexto atual
+        resposta = executa_chatGPT(comando)
+
+        if analisa_respostaGPT(resposta):
+            print(resposta)
+            maquina.say(resposta)
+            maquina.runAndWait()
+
+
+while True:
+    comando_voz_usuario()
+
+#maquina.say("Olá, eu sou um modelo de linguagem treinado pelo OpenAI.")
+
+#maquina.runAndWait()
