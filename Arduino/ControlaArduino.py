@@ -7,6 +7,7 @@ import time
 
 import serial #Importa a biblioteca
 
+from util.Ordem_Comando import executa_comando
 
 
 class Arduino():
@@ -20,9 +21,10 @@ class Arduino():
             or ordem == 'atirar' or ordem == 'atira' or ordem == 'preparar' or ordem == 'prepara':
                 Arduino.ComandaNerf(ordem)
 
-        if ordem == 'frente' or ordem == 'esquerda' or ordem == 'direita' or ordem == 'auto' \
-                or ordem == 'alto':
-                Arduino.ComandaRodas(ordem)
+        if ordem == 'frente' or ordem == 'friend' or ordem == 'fred' or ordem == 'para frente' or ordem == 'para a frente' or ordem == 'esquerda' \
+            or ordem == 'direita' or ordem == 'para' or ordem == 'parar' or ordem == 'stop' or ordem == 'tras' or ordem == 'trás' \
+                or ordem == 'para tras' or ordem == 'auto' or ordem == 'alto':
+                    Arduino.ComandaRodas(ordem)
 
     def ComandaRodas(ordem):
         comando_executado = False
@@ -30,7 +32,7 @@ class Arduino():
 
         while True: #Loop para a conexão com o Arduino
             try:  #Tenta se conectar, se conseguir, o loop se encerra
-                arduino = serial.Serial('COM4', 9600)
+                arduino = serial.Serial('COM6', 9600)
                 print('Arduino das Rodas conectado')
                 break
 
@@ -42,22 +44,57 @@ class Arduino():
             try:
                 if ordem == 'frente':
                     print(ordem)
-                    arduino.write('f'.encode())
+                    arduino.write('1'.encode())
+                    comando_executado = True
+                elif ordem == 'friend':
+                    print(ordem)
+                    arduino.write('1'.encode())
+                    comando_executado = True
+                elif ordem == 'para frente':
+                    print(ordem)
+                    arduino.write('1'.encode())
+                    comando_executado = True
+                elif ordem == 'para a frente':
+                    print(ordem)
+                    arduino.write('1'.encode())
+                    comando_executado = True
+                elif ordem == 'fred':
+                    print(ordem)
+                    arduino.write('1'.encode())
+                    comando_executado = True
+                elif ordem == 'tras':
+                    print(ordem)
+                    arduino.write('2'.encode())
+                    comando_executado = True
+                elif ordem == 'para tras':
+                    print(ordem)
+                    arduino.write('2'.encode())
+                    comando_executado = True
+                elif ordem == 'trás':
+                    print(ordem)
+                    arduino.write('2'.encode())
                     comando_executado = True
                 elif ordem == 'esquerda':
                     print(ordem)
-                    arduino.write('e'.encode())
+                    arduino.write('3'.encode())
                     comando_executado = True
                 elif ordem == 'direita':
                     print(ordem)
-                    arduino.write('d'.encode())
+                    arduino.write('4'.encode())
                     comando_executado = True
 
                 arduino.flush() #Limpa a comunicação
                 time.sleep(2)
-                Count = Count + 1
+
+                comando = executa_comando()
+                if 'parar' in comando:
+                    comando_executado = False
+                elif ordem == 'para':
+                    comando_executado = False
+                elif ordem == 'stop':
+                    comando_executado = False
                 # Sai do loop se o comando foi executado
-                if comando_executado and Count >= 2:
+                if not comando_executado:
                     break
 
             except:
