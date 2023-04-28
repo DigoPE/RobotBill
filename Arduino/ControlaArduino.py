@@ -27,6 +27,7 @@ class Arduino():
                     Arduino.ComandaRodas(ordem)
 
     def ComandaRodas(ordem):
+        executa_ordem = ordem
         comando_executado = False
         Count = 0
 
@@ -42,57 +43,73 @@ class Arduino():
         while True: #Loop principal
 
             try:
-                if ordem == 'frente':
-                    print(ordem)
+                if executa_ordem == 'frente':
+                    print(executa_ordem)
                     arduino.write('1'.encode())
                     comando_executado = True
-                elif ordem == 'friend':
-                    print(ordem)
+                elif executa_ordem == 'friend':
+                    print(executa_ordem)
+                    arduino.write('1'.encode())
+                    executa_ordem = True
+                elif executa_ordem == 'para frente':
+                    print(executa_ordem)
                     arduino.write('1'.encode())
                     comando_executado = True
-                elif ordem == 'para frente':
-                    print(ordem)
+                elif executa_ordem == 'para a frente':
+                    print(executa_ordem)
                     arduino.write('1'.encode())
                     comando_executado = True
-                elif ordem == 'para a frente':
-                    print(ordem)
+                elif executa_ordem == 'fred':
+                    print(executa_ordem)
                     arduino.write('1'.encode())
                     comando_executado = True
-                elif ordem == 'fred':
-                    print(ordem)
-                    arduino.write('1'.encode())
-                    comando_executado = True
-                elif ordem == 'tras':
-                    print(ordem)
+                elif executa_ordem == 'tras':
+                    print(executa_ordem)
                     arduino.write('2'.encode())
                     comando_executado = True
-                elif ordem == 'para tras':
-                    print(ordem)
+                elif executa_ordem == 'para tras':
+                    print(executa_ordem)
                     arduino.write('2'.encode())
                     comando_executado = True
-                elif ordem == 'trás':
-                    print(ordem)
+                elif executa_ordem == 'trás':
+                    print(executa_ordem)
                     arduino.write('2'.encode())
                     comando_executado = True
-                elif ordem == 'esquerda':
-                    print(ordem)
+                elif executa_ordem == 'esquerda':
+                    print(executa_ordem)
                     arduino.write('3'.encode())
                     comando_executado = True
-                elif ordem == 'direita':
-                    print(ordem)
+                elif executa_ordem == 'direita':
+                    print(executa_ordem)
                     arduino.write('4'.encode())
                     comando_executado = True
+                elif executa_ordem == 'parar':
+                    print(executa_ordem)
+                    comando_executado = False
+                elif executa_ordem == 'para':
+                    print(executa_ordem)
+                    comando_executado = False
+                elif executa_ordem == 'stop':
+                    print(executa_ordem)
+                    comando_executado = False
+                #arduino.flush() #Limpa a comunicação
+                #time.sleep(2)
+
+                comando = executa_comando()
+                if 'parar' in comando:
+                    executa_ordem = comando
+                    comando_executado = False
+                elif 'para' in comando:
+                    executa_ordem = comando
+                    comando_executado = False
+                elif 'stop' in comando:
+                    executa_ordem = comando
+                    comando_executado = False
 
                 arduino.flush() #Limpa a comunicação
                 time.sleep(2)
 
-                comando = executa_comando()
-                if 'parar' in comando:
-                    comando_executado = False
-                elif ordem == 'para':
-                    comando_executado = False
-                elif ordem == 'stop':
-                    comando_executado = False
+
                 # Sai do loop se o comando foi executado
                 if not comando_executado:
                     break
