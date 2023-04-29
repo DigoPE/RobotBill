@@ -21,7 +21,7 @@ maquina.setProperty('voice', voices[1].id)
 maquina.setProperty('useCachedVoice', True)
 ################################################
 
-def executa_comando():
+def executa_comando(sistema=''):
 
     audio = sr.Recognizer()
     with sr.Microphone() as source:
@@ -38,28 +38,30 @@ def executa_comando():
 
     except sr.UnknownValueError:
 
-        #Varia a resposta de Não entendimento variando randomicamente.
-        num = random.randint(0, 9)
+        if sistema != 'arduino':
+            #Varia a resposta de Não entendimento variando randomicamente.
+            num = random.randint(0, 9)
 
-        switcher = {
-            0: "Não entendi!",
-            1: "Diga?!!! Não percebi! ",
-            2: "Oi? Como disse?",
-            3: "Olá? Tem alguém falando comigo?",
-            4: "Como é?!!!",
-            5: "Desculpe, mas eu não estou entendendo nada!!!",
-            6: "Tem muito ruido! Acho que tem muita gente falando ao mesmo tempo.",
-            7: "Acho que tem uma música ou muitas pessoas conversando ao fundo!",
-            8: "Oi?!! Tem alguém ai?!!",
-            9: "Zzzzz... há! Desculpe! Me distraí! "
-        }
-        resposta = switcher.get(num, "Número inválido")
+            switcher = {
+                0: "Não entendi!",
+                1: "Diga?!!! Não percebi! ",
+                2: "Oi? Como disse?",
+                3: "Olá? Tem alguém falando comigo?",
+                4: "Como é?!!!",
+                5: "Desculpe, mas eu não estou entendendo nada!!!",
+                6: "Tem muito ruido! Acho que tem muita gente falando ao mesmo tempo.",
+                7: "Acho que tem uma música ou muitas pessoas conversando ao fundo!",
+                8: "Oi?!! Tem alguém ai?!!",
+                9: "Zzzzz... há! Desculpe! Me distraí! "
+            }
+            resposta = switcher.get(num, "Número inválido")
 
-        print(resposta)
-        maquina.say(resposta)
-        maquina.runAndWait()
+            print(resposta)
+            maquina.say(resposta)
+            maquina.runAndWait()
 
-        return 'error'
+            return 'error'
+
 
     except sr.RequestError as e:
         print('Erro ao requisitar resultados; {0}'.format(e))

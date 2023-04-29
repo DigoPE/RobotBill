@@ -23,7 +23,7 @@ class Arduino():
 
         if ordem == 'frente' or ordem == 'friend' or ordem == 'fred' or ordem == 'para frente' or ordem == 'para a frente' or ordem == 'esquerda' \
             or ordem == 'direita' or ordem == 'para' or ordem == 'parar' or ordem == 'stop' or ordem == 'tras' or ordem == 'trás' \
-                or ordem == 'para tras' or ordem == 'auto' or ordem == 'alto':
+                or ordem == 'para tras' or ordem == 'auto' or ordem == 'alto' or ordem == 'automático' or ordem == 'explorar':
                     Arduino.ComandaRodas(ordem)
 
     def ComandaRodas(ordem):
@@ -41,6 +41,8 @@ class Arduino():
                 pass
 
         while True: #Loop principal
+
+            limpa_comunicacao = True
 
             try:
                 if executa_ordem == 'frente':
@@ -83,6 +85,28 @@ class Arduino():
                     print(executa_ordem)
                     arduino.write('4'.encode())
                     comando_executado = True
+
+                elif executa_ordem == 'explorar':
+                    print(executa_ordem)
+                    arduino.write('6'.encode())
+                    comando_executado = True
+                    limpa_comunicacao = False
+                elif executa_ordem == 'auto':
+                    print(executa_ordem)
+                    arduino.write('6'.encode())
+                    comando_executado = True
+                    limpa_comunicacao = False
+                elif executa_ordem == 'alto':
+                    print(executa_ordem)
+                    arduino.write('6'.encode())
+                    comando_executado = True
+                    limpa_comunicacao = False
+                elif executa_ordem == 'automático':
+                    print(executa_ordem)
+                    arduino.write('6'.encode())
+                    comando_executado = True
+                    limpa_comunicacao = False
+
                 elif executa_ordem == 'parar':
                     print(executa_ordem)
                     comando_executado = False
@@ -95,7 +119,7 @@ class Arduino():
                 #arduino.flush() #Limpa a comunicação
                 #time.sleep(2)
 
-                comando = executa_comando()
+                comando = executa_comando('arduino')
                 if 'parar' in comando:
                     executa_ordem = comando
                     comando_executado = False
@@ -106,8 +130,9 @@ class Arduino():
                     executa_ordem = comando
                     comando_executado = False
 
-                arduino.flush() #Limpa a comunicação
-                time.sleep(2)
+                if limpa_comunicacao:
+                    arduino.flush() #Limpa a comunicação
+                time.sleep(0.5)
 
 
                 # Sai do loop se o comando foi executado
