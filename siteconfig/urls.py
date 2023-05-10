@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from ApiSystem import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('apiFarol/', views.FarolViewSet.farol, name='apiFarol'),
     #path('ApiSystem/', views.Portas, name='ApiSystem'),
     #path('ApiComandaFarol/', views.chat, name='ApiComandaFarol'),
 

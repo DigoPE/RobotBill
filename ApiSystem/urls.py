@@ -7,10 +7,13 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 #from rest_framework import permissions
 
-from .views import PortasViewSet
+from .views import PortasViewSet, FarolViewSet
+import ApiSystem.views
 
 router = routers.DefaultRouter()
 router.register('apiPortas', PortasViewSet)
+#router.register('apiFarol', FarolViewSet, basename='farol')
+
 
 #Schema View para o Swagger
 schema_view = get_schema_view(

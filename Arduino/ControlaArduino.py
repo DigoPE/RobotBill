@@ -1,8 +1,3 @@
-'''
- Blog Eletrogate - Como conectar o Arduino com Python
- Miguel Sena
- blog.eletrogate.com
-'''
 import time
 
 import serial #Importa a biblioteca
