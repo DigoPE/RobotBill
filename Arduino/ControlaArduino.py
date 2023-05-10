@@ -22,9 +22,12 @@ class Arduino():
                 Arduino.ComandaNerf(ordem)
 
         if ordem == 'frente' or ordem == 'friend' or ordem == 'fred' or ordem == 'para frente' or ordem == 'para a frente' or ordem == 'esquerda' \
-            or ordem == 'direita' or ordem == 'para' or ordem == 'parar' or ordem == 'stop' or ordem == 'tras' or ordem == 'trás' \
+            or ordem == 'frank' or ordem == 'direita' or ordem == 'para' or ordem == 'parar' or ordem == 'stop' or ordem == 'tras' or ordem == 'trás' \
                 or ordem == 'para tras' or ordem == 'auto' or ordem == 'alto' or ordem == 'automático' or ordem == 'explorar':
                     Arduino.ComandaRodas(ordem)
+
+        if ordem == 'aceder' or ordem == 'acende' or ordem == 'acender' or ordem == 'apaga' or ordem == 'apagar':
+                    Arduino.ComandaFarol(ordem)
 
     def ComandaRodas(ordem):
         executa_ordem = ordem
@@ -62,6 +65,10 @@ class Arduino():
                     arduino.write('1'.encode())
                     comando_executado = True
                 elif executa_ordem == 'fred':
+                    print(executa_ordem)
+                    arduino.write('1'.encode())
+                    comando_executado = True
+                elif executa_ordem == 'frank':
                     print(executa_ordem)
                     arduino.write('1'.encode())
                     comando_executado = True
@@ -149,7 +156,7 @@ class Arduino():
 
         while True: #Loop para a conexão com o Arduino
             try:  #Tenta se conectar, se conseguir, o loop se encerra
-                arduino = serial.Serial('COM3', 9600)
+                arduino = serial.Serial('COM7', 9600)
                 print('Arduino do Nerf conectado')
                 break
 
@@ -189,6 +196,41 @@ class Arduino():
                 elif ordem == 'prepara':
                     print(ordem)
                     arduino.write('p'.encode())
+                    comando_executado = True
+                arduino.flush() #Limpa a comunicação
+                time.sleep(2)
+                Count = Count + 1
+                # Sai do loop se o comando foi executado
+                if comando_executado and Count >= 2:
+                    break
+
+            except:
+                pass
+
+
+    def ComandaFarol(ordem):
+        comando_executado = False
+        Count = 0
+
+        while True: #Loop para a conexão com o Arduino
+            try:  #Tenta se conectar, se conseguir, o loop se encerra
+                arduino = serial.Serial('COM3', 9600)
+                print('Arduino dos Farois conectado')
+                break
+
+            except:
+                pass
+
+        while True: #Loop principal
+
+            try:
+                if ordem == 'acender':
+                    print(ordem)
+                    arduino.write('1'.encode())
+                    comando_executado = True
+                elif ordem == 'apagar':
+                    print(ordem)
+                    arduino.write('2'.encode())
                     comando_executado = True
                 arduino.flush() #Limpa a comunicação
                 time.sleep(2)

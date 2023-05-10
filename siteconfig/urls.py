@@ -14,12 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from ApiChatGPT import views
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ApiChatGPT/', views.chat, name='ApiChatGPT'),
+    #path('ApiSystem/', views.Portas, name='ApiSystem'),
+    #path('ApiComandaFarol/', views.chat, name='ApiComandaFarol'),
 
+    # path da API.
+    path('', include('ApiSystem.urls')),
+    #path('', include('apiBackOffice.urls')),
+    # path('', include('apiMenusApp.urls')),
 
 ]
