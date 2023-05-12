@@ -9,7 +9,7 @@ class Temas(models.Model):
     class Meta:
         db_table = 'Temas'
 
-    def __unicode__(self):
+    def __str__(self):
         return (self.Assunto)
 
 #Entidades criadas que não serão modificadas rotineiramente, iremos considera-las como Entidades Estáticas.
@@ -22,5 +22,5 @@ class Interacao(models.Model):
     class Meta:
         db_table = 'Interacao'
 
-    def __unicode__(self):
+    def __str__(self):
         return (self.Contato)

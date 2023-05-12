@@ -20,6 +20,7 @@ from ApiSystem import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('apiFarol/', views.FarolViewSet.farol, name='apiFarol'),
+    path('apiTestaPortas/', views.TestaPortasViewSet.testPortas, name='apiTestaPortas'),
     #path('ApiSystem/', views.Portas, name='ApiSystem'),
     #path('ApiComandaFarol/', views.chat, name='ApiComandaFarol'),
 

@@ -20,7 +20,9 @@ instalar_django:
 #executa_mkdoc:
 #	mkdocs new .
 
-
+#Instalar pyngrok para Expor a Aplicação Externamente do Servidor Local.
+instala_pyngrok:
+	pip install pyngrok;
 
 versao_django:
 	python -m django version

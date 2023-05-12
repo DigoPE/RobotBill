@@ -1,18 +1,20 @@
 from django.urls import path, include
 from rest_framework import routers
-from rest_framework.authtoken import views
+#from rest_framework.authtoken import views
 
 from django.urls import re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 #from rest_framework import permissions
 
-from .views import PortasViewSet, FarolViewSet
-import ApiSystem.views
+from .views import PortasViewSet, PlacasViewSet
+#import ApiSystem.views
 
+#Colocar no router apenas as API's vindas do Banco de Dados.
+#API's de controle do Arduino, colocar na urls do "siteconfig"
 router = routers.DefaultRouter()
 router.register('apiPortas', PortasViewSet)
-#router.register('apiFarol', FarolViewSet, basename='farol')
+router.register('apiPlacas', PlacasViewSet)
 
 
 #Schema View para o Swagger
@@ -22,8 +24,8 @@ schema_view = get_schema_view(
         default_version='v1',
         description="Visualizações das API's.",
         terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="orkestra@powerit.pt"),
-        license=openapi.License(name="PowerIt License"),
+        contact=openapi.Contact(email="rodrigo.barros1981@hotmail.com"),
+        license=openapi.License(name="Free License"),
     ),
     public=True,
     #permission_classes=(permissions.AllowAny,),
