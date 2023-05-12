@@ -51,8 +51,8 @@ class TestaPortasViewSet():
             for porta in resultado_portas:
                 nome_porta = porta[0]
                 status_porta = porta[1]
-                nomes_portas.append({'nome': nome_porta, 'status': status_porta})
+                nomes_portas.append({'nome': nome_porta, 'status_porta': status_porta})
 
-            return JsonResponse({'status': 'success', 'nomes_portas': nomes_portas})
+            return JsonResponse({'nomes_portas': nomes_portas})
         else:
-            return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+            return JsonResponse({'nomes_portas': 'error', 'message': 'Invalid request method'})
