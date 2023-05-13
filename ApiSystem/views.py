@@ -2,7 +2,11 @@ from rest_framework import viewsets, permissions
 from ApiSystem.serializers import PortasSerializer, PlacasSerializer
 
 from HardwareApp.models import Portas, Placas
+
 from Arduino.ControlaFarolApi import Farol
+from Arduino.ControlaRodasApi import Rodas
+from Arduino.ControlaNerfApi import Nerf
+
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -36,7 +40,30 @@ class FarolViewSet():
         if request.method == 'GET':
             ordem = request.GET.get('ordem')
             Farol.ComandaFarol(ordem)
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
+class RodasViewSet():
+    @staticmethod
+    @csrf_exempt
+    def rodas(request):
+
+        if request.method == 'GET':
+            ordem = request.GET.get('ordem')
+            Rodas.ComandaRodas(ordem)
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+class NerfViewSet():
+    @staticmethod
+    @csrf_exempt
+    def nerfs(request):
+
+        if request.method == 'GET':
+            ordem = request.GET.get('ordem')
+            Nerf.ComandaNerf(ordem)
             return JsonResponse({'status': 'success'})
         else:
             return JsonResponse({'status': 'error', 'message': 'Invalid request method'})

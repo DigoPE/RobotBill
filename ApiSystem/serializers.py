@@ -19,6 +19,12 @@ class PlacasSerializer(serializers.ModelSerializer):
 class FarolSerializer(serializers.Serializer):
     ordem = serializers.CharField()
 
+class RodasSerializer(serializers.Serializer):
+    ordem = serializers.CharField()
+
+class NerfSerializer(serializers.Serializer):
+    ordem = serializers.CharField()
+
 class TestaPortasSerializer(serializers.Serializer):
     nome = serializers.CharField()
     status = serializers.CharField()
