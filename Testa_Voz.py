@@ -1,13 +1,5 @@
-import speech_recognition as sr
-import pyttsx3
-import datetime
-import wikipedia
-import openai
-#import pywhatkit
 
-import requests
-from bs4 import BeautifulSoup
-import webbrowser
+import pyttsx3
 
 maquina = pyttsx3.init()
 
