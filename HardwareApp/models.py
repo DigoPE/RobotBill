@@ -1,5 +1,3 @@
-from django.db.models import CharField
-
 from django.db import models
 
 #Entidades criadas que não serão modificadas rotineiramente, iremos considera-las como Entidades Estáticas.

@@ -32,7 +32,7 @@ def abrir_YouTube(descricao):
 
 def executa_chatGPT(prompt):
     # Inicialize o API key do OpenAI
-    #openai.api_key =
+    openai.api_key = "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"
     # Defina o modelo a ser usado (no caso, o GPT-3)
     model_engine = "text-davinci-002"
 
