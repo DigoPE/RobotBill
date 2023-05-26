@@ -1,5 +1,3 @@
-from builtins import complex
-
 import speech_recognition as sr
 
 def executa_comando():
