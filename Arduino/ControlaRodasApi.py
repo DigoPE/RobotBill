@@ -11,10 +11,10 @@ class Rodas:
 
         #---Código Padrão para Consulta ao banco. ---------
         conexao = ConexaoDB()
-        SQL = ('SELECT billdb.portas.Nome AS PortaNome '
-               'FROM billdb.portas, billdb.placas '
-               'WHERE billdb.portas.Id = billdb.placas.Porta_id '
-               'AND billdb.placas.Nome = \'ESP32_Rodas\'')
+        SQL = ('SELECT Portas.Nome AS PortaNome '
+               'FROM Portas, Placas '
+               'WHERE Portas.Id = Placas.Porta_id '
+               'AND Placas.Nome = \'ESP32_Rodas\'')
         rsPorta = conexao.executaQueryDB(SQL)
         porta = rsPorta[0][0] if rsPorta else None
         # ---Fim  ------------------------------------------

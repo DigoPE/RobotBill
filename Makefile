@@ -8,11 +8,11 @@ instalar_django:
 
 #cria_requeremento:
 	#@echo 'Criando ou Atualizando Arquivo de Requerimento.'
-	#@pip freeze > requerimentos.txt
+	#@pip freeze > requirements.txt
 
 
 #instala_requerimento:
-#	pip install -r requerimentos.txt
+#	pip install -r requirements.txt
 
 #instala_mkdoc:
 #	pip install mkdocs
