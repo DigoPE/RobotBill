@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', True)
 
 # settings.py
-ALLOWED_HOSTS = ['localhost', '127.0.0.1','192.168.1.110', '.ngrok.io', '.ngrok-free.app', '.app.vtxhub.com', '.duino.store']
+ALLOWED_HOSTS = ['*']
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
