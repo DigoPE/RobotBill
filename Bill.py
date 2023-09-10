@@ -2,14 +2,15 @@
 
 import datetime
 import wikipedia
-import openai
-
+import requests
 
 import socket
 
 from Arduino.ControlaArduino import Arduino
 
 from util.Ordem_Comando import executa_comando, maquina
+from util.extenso_numero import numero_por_extenso, data_por_extenso
+
 
 def verificar_conexao_internet():
     try:
@@ -30,26 +31,26 @@ def abrir_YouTube(descricao):
     except Exception as e:
         return 'Erro ao tentar Tocar Música. Verifique sua Conexão.'
 
-def executa_chatGPT(prompt):
-    # Inicialize o API key do OpenAI
-    openai.api_key = "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"
-    # Defina o modelo a ser usado (no caso, o GPT-3)
-    model_engine = "text-davinci-002"
+def executa_Pesquisa(query):
 
-    # Obtenha uma resposta do modelo
-    params = openai.Completion.create(
-        engine=model_engine,
-        prompt=prompt,
-        max_tokens=1024,
-        n=1,
-        stop=None,
-        temperature=0.5,
-    )
+    wikipedia.set_lang('pt')
+    try:
+        resultado = wikipedia.summary(query, 2)
+        return resultado
+    except wikipedia.exceptions.DisambiguationError as e:
+        msnError = f'Erro na pesquisa. Houve uma ambiguidade na sua pergunta. Tente ser mais específico.'
+        return msnError
+    except wikipedia.exceptions.HTTPTimeoutError as e:
+        msnError = 'Erro na pesquisa. A busca demorou muito para responder. Tente novamente mais tarde.'
+        return msnError
+    except wikipedia.exceptions.PageError as e:
+        msnError = 'Erro na pesquisa. A página solicitada não foi encontrada.'
+        return msnError
+    except Exception as e:
+        msnError = 'Erro desconhecido na pesquisa. Favor refaça a pergunta.'
+        return msnError
 
-    answer = params.choices[0].text
-    return answer
-
-def  analisa_respostaGPT(resp):
+def  analisa_Pesquisa(resp):
 
     if len(resp) > 2500:
         maquina.say('Minha resposta é um pouco extensa, deseja escuta-la?')
@@ -61,18 +62,65 @@ def  analisa_respostaGPT(resp):
         else:
             return False
 
-
 def comando_voz_usuario():
     # Inicializa o contexto da conversa
     context = ""
     comando = executa_comando()
 
     if 'horas' in comando:
-        hora = datetime.datetime.now().strftime('%H:%M')
-        maquina.say('Agora são' + hora)
+        agora = datetime.datetime.now()
+        hora = numero_por_extenso(agora.hour)
+        minutos = agora.minute
+        segundos = agora.second
+
+        hora_por_extenso = f"{hora} horas, {minutos} minutos e {segundos} segundos."
+        print(hora_por_extenso)
+        maquina.say('Agora são' + hora_por_extenso)
         maquina.runAndWait()
+    elif 'dia' in comando:
+        data_atual = datetime.datetime.now().strftime('%Y-%m-%d')
+        data_extenso = data_por_extenso(data_atual)
+        print('Hoje é o dia ' + data_extenso)
+        maquina.say('Hoje é o dia ' + data_extenso)
+        maquina.runAndWait()
+    elif 'data de hoje' in comando:
+        agora = datetime.datetime.now()
+        hora = numero_por_extenso(agora.hour)
+        minutos = agora.minute
+        segundos = agora.second
+
+        hora_por_extenso = f"{hora} horas, {minutos} minutos e {segundos} segundos."
+
+        data_atual = datetime.datetime.now().strftime('%Y-%m-%d')
+        data_extenso = data_por_extenso(data_atual)
+
+        print('Agora são ' + hora_por_extenso +' Do dia ' +  data_extenso)
+        maquina.say('Agora são ' + hora_por_extenso +' Do dia ' +  data_extenso)
+        maquina.runAndWait()
+
     elif 'procure por' in comando:
         procurar = comando.replace('procure por', '')
+        wikipedia.set_lang('pt')
+        resultado = wikipedia.summary(procurar,2)
+        print(resultado)
+        maquina.say(resultado)
+        maquina.runAndWait()
+    elif 'pesquise por' in comando:
+        procurar = comando.replace('pesquise por', '')
+        wikipedia.set_lang('pt')
+        resultado = wikipedia.summary(procurar,2)
+        print(resultado)
+        maquina.say(resultado)
+        maquina.runAndWait()
+    elif 'fale sobre' in comando:
+        procurar = comando.replace('fale sobre', '')
+        wikipedia.set_lang('pt')
+        resultado = wikipedia.summary(procurar,2)
+        print(resultado)
+        maquina.say(resultado)
+        maquina.runAndWait()
+    elif 'me fale sobre' in comando:
+        procurar = comando.replace('me fale sobre', '')
         wikipedia.set_lang('pt')
         resultado = wikipedia.summary(procurar,2)
         print(resultado)
@@ -196,12 +244,12 @@ def comando_voz_usuario():
 
     else:
         # Gera a resposta utilizando o contexto atual
-        resposta = executa_chatGPT(comando)
+        resposta = executa_Pesquisa(comando)
 
-        if analisa_respostaGPT(resposta):
-            print(resposta)
-            maquina.say(resposta)
-            maquina.runAndWait()
+        print(resposta)
+        maquina.say(resposta)
+        maquina.runAndWait()
+
 
 
 while True:

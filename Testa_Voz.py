@@ -5,7 +5,7 @@ maquina = pyttsx3.init()
 
 # Configurando a velocidade da fala:
 rate = maquina.getProperty('rate')
-maquina.setProperty('rate', rate-50)
+maquina.setProperty('rate', rate+10)
 ################################################
 
 # Configurando o volume da fala: O volume padrão é 1, nesse caso estamos aumentando em 50%

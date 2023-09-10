@@ -1,4 +1,4 @@
-
+import time
 import speech_recognition as sr
 import pyttsx3
 import random
@@ -7,7 +7,7 @@ maquina = pyttsx3.init()
 
 # Configurando a velocidade da fala:
 rate = maquina.getProperty('rate')
-maquina.setProperty('rate', rate-50)
+maquina.setProperty('rate', rate+10)
 ################################################
 
 # Configurando o volume da fala: O volume padrão é 1, nesse caso estamos aumentando em 50%
@@ -26,6 +26,9 @@ def executa_comando(sistema=''):
     audio = sr.Recognizer()
     with sr.Microphone() as source:
         print('Ouvindo..')
+        maquina.say("Ouvindo..")
+        maquina.runAndWait()
+        time.sleep(0.5)
         voz = audio.listen(source)
 
     try:
