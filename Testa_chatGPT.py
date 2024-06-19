@@ -5,7 +5,7 @@ def executa_chatGPT(prompt):
     openai.api_key = "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"
     # Defina o modelo a ser usado (no caso, o GPT-3)
     model_engine = "text-davinci-002"
-
+#git tes
     # Obtenha uma resposta do modelo
     params = openai.Completion.create(
         engine=model_engine,
