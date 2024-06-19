@@ -8,8 +8,9 @@ reconhecimento_rosto = mp.solutions.face_detection
 desenho = mp.solutions.drawing_utils
 reconhecedor_rosto = reconhecimento_rosto.FaceDetection()
 
-# Carrega a imagem de referência, tem que criar um Array para ter mais de uma referencia.
-imagem_referencia = cv2.imread('FotoRodrigo.png')
+# Carregue as imagens de referência em um array
+imagens_referencia = [cv2.imread('FotoRodrigo.png'), cv2.imread('FotoRodrigo02.png'), cv2.imread('FotoRodrigo03.png'), cv2.imread('FotoRodrigo04.png'),
+                      cv2.imread('FotoCasal.png')]  # Adicione quantas imagens desejar
 
 while webcam.isOpened():
     validacao, frame = webcam.read()
@@ -30,18 +31,25 @@ while webcam.isOpened():
 
             rosto_atual = frame[y:y + h, x:x + w]
 
-            # Realiza a comparação com a imagem de referência
-            resultado_comparacao = cv2.matchTemplate(imagem_referencia, rosto_atual, cv2.TM_CCOEFF_NORMED)
+            # Inicializa uma variável para rastrear se algum rosto correspondente foi encontrado
+            rosto_correspondente_encontrado = False
 
-            # Define um limite de similaridade (ajuste conforme necessário)
-            limite_similaridade = 0.7
+            # Realiza a comparação com cada imagem de referência
+            for imagem_referencia in imagens_referencia:
+                resultado_comparacao = cv2.matchTemplate(imagem_referencia, rosto_atual, cv2.TM_CCOEFF_NORMED)
 
-            # Encontra as correspondências acima do limite
-            loc = np.where(resultado_comparacao >= limite_similaridade)
+                # Define um limite de similaridade (ajuste conforme necessário)
+                limite_similaridade = 0.7
 
-            if loc[0].size > 0:
-                print("Rosto correspondente encontrado!")
-            else:
+                # Encontra as correspondências acima do limite
+                loc = np.where(resultado_comparacao >= limite_similaridade)
+
+                if loc[0].size > 0:
+                    rosto_correspondente_encontrado = True
+                    print("Rosto correspondente encontrado!")
+                    break  # Se um rosto correspondente for encontrado, saia do loop
+
+            if not rosto_correspondente_encontrado:
                 print("Rosto NÃO encontrado!")
 
     cv2.imshow("Rostos na sua webcam", imagem)

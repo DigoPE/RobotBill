@@ -1,12 +1,16 @@
+
+
 import datetime
 import wikipedia
 import requests
+
 import socket
 
 from Arduino.ControlaArduino import Arduino
+
 from util.Ordem_Comando import executa_comando, maquina
 from util.extenso_numero import numero_por_extenso, data_por_extenso
-from util.Sistema_IA import executa_IA
+
 
 def verificar_conexao_internet():
     try:
@@ -27,7 +31,26 @@ def abrir_YouTube(descricao):
     except Exception as e:
         return 'Erro ao tentar Tocar Música. Verifique sua Conexão.'
 
-def analisa_Pesquisa(resp):
+def executa_Pesquisa(query):
+
+    wikipedia.set_lang('pt')
+    try:
+        resultado = wikipedia.summary(query, 2)
+        return resultado
+    except wikipedia.exceptions.DisambiguationError as e:
+        msnError = f'Erro na pesquisa. Houve uma ambiguidade na sua pergunta. Tente ser mais específico.'
+        return msnError
+    except wikipedia.exceptions.HTTPTimeoutError as e:
+        msnError = 'Erro na pesquisa. A busca demorou muito para responder. Tente novamente mais tarde.'
+        return msnError
+    except wikipedia.exceptions.PageError as e:
+        msnError = 'Erro na pesquisa. A página solicitada não foi encontrada.'
+        return msnError
+    except Exception as e:
+        msnError = 'Erro desconhecido na pesquisa. Favor refaça a pergunta.'
+        return msnError
+
+def  analisa_Pesquisa(resp):
 
     if len(resp) > 2500:
         maquina.say('Minha resposta é um pouco extensa, deseja escuta-la?')
@@ -40,20 +63,69 @@ def analisa_Pesquisa(resp):
             return False
 
 def comando_voz_usuario():
-
     # Inicializa o contexto da conversa
     context = ""
     comando = executa_comando()
-    comando_anterior = ""
 
-    if 'pesquise por' in comando:
+    if 'horas' in comando:
+        agora = datetime.datetime.now()
+        hora = numero_por_extenso(agora.hour)
+        minutos = agora.minute
+        segundos = agora.second
+
+        hora_por_extenso = f"{hora} horas, {minutos} minutos e {segundos} segundos."
+        print(hora_por_extenso)
+        maquina.say('Agora são' + hora_por_extenso)
+        maquina.runAndWait()
+    elif 'dia' in comando:
+        data_atual = datetime.datetime.now().strftime('%Y-%m-%d')
+        data_extenso = data_por_extenso(data_atual)
+        print('Hoje é o dia ' + data_extenso)
+        maquina.say('Hoje é o dia ' + data_extenso)
+        maquina.runAndWait()
+    elif 'data de hoje' in comando:
+        agora = datetime.datetime.now()
+        hora = numero_por_extenso(agora.hour)
+        minutos = agora.minute
+        segundos = agora.second
+
+        hora_por_extenso = f"{hora} horas, {minutos} minutos e {segundos} segundos."
+
+        data_atual = datetime.datetime.now().strftime('%Y-%m-%d')
+        data_extenso = data_por_extenso(data_atual)
+
+        print('Agora são ' + hora_por_extenso +' Do dia ' +  data_extenso)
+        maquina.say('Agora são ' + hora_por_extenso +' Do dia ' +  data_extenso)
+        maquina.runAndWait()
+
+    elif 'procure por' in comando:
+        procurar = comando.replace('procure por', '')
+        wikipedia.set_lang('pt')
+        resultado = wikipedia.summary(procurar,2)
+        print(resultado)
+        maquina.say(resultado)
+        maquina.runAndWait()
+    elif 'pesquise por' in comando:
         procurar = comando.replace('pesquise por', '')
         wikipedia.set_lang('pt')
         resultado = wikipedia.summary(procurar,2)
         print(resultado)
         maquina.say(resultado)
         maquina.runAndWait()
-
+    elif 'fale sobre' in comando:
+        procurar = comando.replace('fale sobre', '')
+        wikipedia.set_lang('pt')
+        resultado = wikipedia.summary(procurar,2)
+        print(resultado)
+        maquina.say(resultado)
+        maquina.runAndWait()
+    elif 'me fale sobre' in comando:
+        procurar = comando.replace('me fale sobre', '')
+        wikipedia.set_lang('pt')
+        resultado = wikipedia.summary(procurar,2)
+        print(resultado)
+        maquina.say(resultado)
+        maquina.runAndWait()
     elif 'toque' in comando:
         # Só funciona on-line. Corrigir o erro quando o PC estiver off-line.
         musica = comando.replace('toque','')
@@ -170,42 +242,15 @@ def comando_voz_usuario():
         maquina.runAndWait()
         Arduino.SistemasArduino(ordem)
 
-    elif 'comando' in comando.lower():
-
-        while True:
-            #comando = executa_comando()
-            #comando = input(comando)
-            comando = input("Você: ")
-
-            if 'sair' in comando:
-                break
-
-            resposta = executa_IA(comando).replace('*', '')
-            print("Gemini: ", resposta, "\n")
-
-            maquina.say(resposta)
-            maquina.runAndWait()
     else:
         # Gera a resposta utilizando o contexto atual
-        # resposta = executa_IA(comando).replace('*', '')
-        # print("Gemini: ", resposta, "\n")
-        # maquina.say(resposta)
-        # maquina.runAndWait()
-        while True:
-            # Recebe o comando de voz da função "executa_comando()"
-            comando_voz = executa_comando()
+        resposta = executa_Pesquisa(comando)
 
-            # Processa o comando e gera a resposta
-            resposta = executa_IA(comando_voz).replace('*', '')
-            print("Gemini: ", resposta, "\n")
+        print(resposta)
+        maquina.say(resposta)
+        maquina.runAndWait()
 
-            # Fala a resposta para o usuário
-            maquina.say(resposta)
-            maquina.runAndWait()
 
-            # Verifica se o comando foi "sair" para finalizar o loop
-            if 'sair' in comando_voz:
-                break
 
 while True:
     comando_voz_usuario()
